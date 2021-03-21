@@ -1,5 +1,8 @@
 # WebsiteTemplatorUi
 
+To view the main repository for this project, go to  
+[website-templator](https://github.com/tbreitenfeldt/website-templator)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.5.
 
 ## Development server
