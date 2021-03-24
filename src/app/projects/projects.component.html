@@ -1,0 +1,10 @@
+
+<div id="projects">
+    <h1>Projects</h1>
+    <button type="button">New Project</button>
+
+    <div *ngIf="isLoading" aria-label="Loading..."></div>
+    <ul *ngIf="projects">
+        <li *ngFor=let project of projects">{{project.name }}</li>
+    </ul>
+</div>
