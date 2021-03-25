@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../models/project';
+import { ErrorService } from '../services/error.service';
 import { ProjectsService } from '../services/projects.service';
 
 @Component({
@@ -11,7 +12,10 @@ export class ProjectsComponent implements OnInit {
   projects: Project[];
   isLoading: boolean;
 
-  constructor(private projectsService: ProjectsService) {}
+  constructor(
+    private projectsService: ProjectsService,
+    public errorService: ErrorService
+  ) {}
 
   ngOnInit(): void {
     this.getProjects();
