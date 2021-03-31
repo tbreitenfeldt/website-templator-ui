@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from '../models/project';
 import { ErrorService } from '../services/error.service';
 import { ProjectsService } from '../services/projects.service';
+import { TitleService } from '../services/title.service';
+import { CreateProjectModalComponent } from './create-project-modal/create-project-modal.component';
 
 @Component({
   selector: 'app-projects',
@@ -14,6 +16,7 @@ export class ProjectsComponent implements OnInit {
 
   constructor(
     private projectsService: ProjectsService,
+    private titleService: TitleService,
     public errorService: ErrorService
   ) {}
 
@@ -26,6 +29,16 @@ export class ProjectsComponent implements OnInit {
     this.projectsService.getProjects().subscribe((projects: Project[]) => {
       this.projects = projects;
       this.isLoading = false;
+    });
+  }
+
+  openCreateProjectModal(
+    createProjectModal: CreateProjectModalComponent
+  ): void {
+    createProjectModal.open().then((result: Project) => {
+      if (result) {
+        this.projects.push(result);
+      }
     });
   }
 }

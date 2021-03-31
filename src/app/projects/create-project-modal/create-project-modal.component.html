@@ -1,0 +1,53 @@
+<ng-template #createProjectModal let-c="close" let-d="dismiss">
+  <div class="ds-c-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Project</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="d()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="createProject($event)">
+          <div class="form-group">
+            <label for="projectName" class="col-form-label">Name: </label>
+            <input
+              class="form-control"
+              name="name"
+              id="projectName"
+              (input)="project.name = $event.target.value"
+            />
+          </div>
+          <div class="form-group">
+            <label for="projectDescription" class="col-form-label">
+              Description:
+            </label>
+            <textarea
+              class="form-control"
+              name="description"
+              id="projectDescription"
+              [(ngModel)]="project.description"
+            ></textarea>
+          </div>
+
+          <div *ngIf="errorService.error" class="error" role="alert">
+            {{ errorService.error.error.message }}
+          </div>
+
+          <input
+            type="button"
+            (click)="createProject($event)"
+            class="btn btn-primary"
+            value="Save"
+          />
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

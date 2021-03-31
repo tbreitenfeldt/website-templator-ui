@@ -1,0 +1,33 @@
+<div class="project">
+  <button>Rename Project</button>
+  <button (click)="deleteProject()">Delete Project</button>
+
+  <p *ngIf="project">{{ project.description }}</p>
+
+  <div *ngIf="isLoading" aria-live="polite">Loading...</div>
+
+  <div class="project-files"></div>
+  <table *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th>File Name</th>
+        <th>Created On</th>
+        <th>Modified On/th></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let projectFile of projectFiles">
+        <td>{{ projectFile.filename }}</td>
+        <td>{{ projectFile.createdOn }}</td>
+        <td>{{ projectFile.updatedOn || "" }}</td>
+        <td>
+          <button>Edit {{ projectFile.filename }}</button>
+          <button (click)="deleteProjectFile(projectFile.id)">
+            Delete {{ projectFile.filename }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

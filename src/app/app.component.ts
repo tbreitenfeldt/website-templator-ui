@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -13,11 +18,12 @@ import { TitleService } from './services/title.service';
 })
 export class AppComponent implements OnInit {
   constructor(
-    public titleService: TitleService,
-    public skipLinkService: SkipLinkService
+    public skipLinkService: SkipLinkService,
+    public titleService: TitleService
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setupAutomaticPageTitleManagement('#content-title');
     this.skipLinkService.setupSkipLinkPath();
   }
 }

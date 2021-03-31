@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,9 +14,17 @@ import { ErrorService } from './services/error.service';
 import { SkipLinkService } from './services/skip-link.service';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { HomeComponent } from './home/home.component';
+import { CreateProjectModalComponent } from './projects/create-project-modal/create-project-modal.component';
+import { ViewProjectComponent } from './view-project/view-project.component';
 
 @NgModule({
-  declarations: [AppComponent, ProjectsComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    ProjectsComponent,
+    HomeComponent,
+    CreateProjectModalComponent,
+    ViewProjectComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -25,6 +33,7 @@ import { HomeComponent } from './home/home.component';
     CKEditorModule,
   ],
   providers: [
+    NgbModal,
     Title,
     TitleService,
     ErrorService,
