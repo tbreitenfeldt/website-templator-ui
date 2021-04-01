@@ -10,17 +10,19 @@
   <table *ngIf="!isLoading">
     <thead>
       <tr>
-        <th>File Name</th>
-        <th>Created On</th>
-        <th>Modified On/th></th>
-        <th>Actions</th>
+        <th scope="col">File Name</th>
+        <th scope="col">Created On</th>
+        <th scope="col">Modified On</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let projectFile of projectFiles">
-        <td>{{ projectFile.filename }}</td>
-        <td>{{ projectFile.createdOn }}</td>
-        <td>{{ projectFile.updatedOn || "" }}</td>
+        <td scope="row">{{ projectFile.filename }}</td>
+        <td>
+          {{ projectFile.createdOn | date: "short" }}
+        </td>
+        <td>{{ projectFile.updatedOn | date: "short" }}</td>
         <td>
           <button>Edit {{ projectFile.filename }}</button>
           <button (click)="deleteProjectFile(projectFile.id)">
