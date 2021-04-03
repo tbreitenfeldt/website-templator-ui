@@ -3,7 +3,7 @@ import { Project } from '../models/project';
 import { ErrorService } from '../services/error.service';
 import { ProjectsService } from '../services/projects.service';
 import { TitleService } from '../services/title.service';
-import { CreateProjectModalComponent } from './create-project-modal/create-project-modal.component';
+import { CreateEditProjectModalComponent } from '../modals/create-edit-project-modal/create-edit-project-modal.component';
 
 @Component({
   selector: 'app-projects',
@@ -33,7 +33,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   openCreateProjectModal(
-    createProjectModal: CreateProjectModalComponent
+    createProjectModal: CreateEditProjectModalComponent
   ): void {
     createProjectModal.open().then((result: Project) => {
       if (result) {

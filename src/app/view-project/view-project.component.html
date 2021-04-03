@@ -1,35 +1,66 @@
-<div class="project">
-  <button>Rename Project</button>
-  <button (click)="deleteProject()">Delete Project</button>
+<div *ngIf="isLoading" aria-live="polite">Loading...</div>
 
-  <p *ngIf="project">{{ project.description }}</p>
+<div *ngIf="!isLoading" class="project">
+  <button (click)="openEditProjectModal(editProjectModal)">
+    Rename Project
+  </button>
+  <button (click)="deleteProject(deleteProjectConfirmationModal)">
+    Delete Project
+  </button>
 
-  <div *ngIf="isLoading" aria-live="polite">Loading...</div>
+  <p *ngIf="project && project.description">{{ project.description }}</p>
+  <hr />
+  <button>Create New File</button>
 
-  <div class="project-files"></div>
-  <table *ngIf="!isLoading">
-    <thead>
-      <tr>
-        <th scope="col">File Name</th>
-        <th scope="col">Created On</th>
-        <th scope="col">Modified On</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let projectFile of projectFiles">
-        <td scope="row">{{ projectFile.filename }}</td>
-        <td>
-          {{ projectFile.createdOn | date: "short" }}
-        </td>
-        <td>{{ projectFile.updatedOn | date: "short" }}</td>
-        <td>
-          <button>Edit {{ projectFile.filename }}</button>
-          <button (click)="deleteProjectFile(projectFile.id)">
-            Delete {{ projectFile.filename }}
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="projectFiles" class="project-files">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">File Name</th>
+          <th scope="col">Created On</th>
+          <th scope="col">Modified On</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let projectFile of projectFiles">
+          <td scope="row">{{ projectFile.filename }}</td>
+          <td>{{ projectFile.createdOn | date: "short" }}</td>
+          <td>{{ projectFile.updatedOn | date: "short" }}</td>
+          <td>
+            <button>Edit {{ projectFile.filename }}</button>
+            <button
+              (click)="
+                selectedProjectFile = projectFile;
+                deleteProjectFile(deleteFileConfirmationModal, projectFile.id)
+              "
+            >
+              Delete {{ projectFile.filename }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<app-confirmation-modal
+  #deleteProjectConfirmationModal
+  title="Delete Project Confirmation"
+  message="Are you sure you would like to delete the project {{
+    project.name
+  }}?"
+></app-confirmation-modal>
+
+<app-confirmation-modal
+  #deleteFileConfirmationModal
+  title="Delete File Confirmation"
+  message="Are you sure you would like to delete the file {{
+    selectedProjectFile.filename
+  }}?"
+></app-confirmation-modal>
+
+<app-create-edit-project-modal
+  #editProjectModal
+  mode="edit"
+></app-create-edit-project-modal>

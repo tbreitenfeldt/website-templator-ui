@@ -1,0 +1,30 @@
+<app-modal #modalRef [title]="modalTitle">
+  <form (ngSubmit)="onSubmit($event)">
+    <div class="form-group">
+      <label for="projectName" class="col-form-label">Name: </label>
+      <input
+        class="form-control"
+        name="name"
+        id="projectName"
+        [(ngModel)]="project.name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="projectDescription" class="col-form-label">
+        Description:
+      </label>
+      <textarea
+        class="form-control"
+        name="description"
+        id="projectDescription"
+        [(ngModel)]="project.description"
+      ></textarea>
+    </div>
+
+    <div *ngIf="errorService.error" class="error" role="alert">
+      {{ errorService.error.error.message }}
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Save" />
+  </form>
+</app-modal>

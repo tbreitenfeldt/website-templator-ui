@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ConfirmationModalComponent } from '../modals/confirmation-modal/confirmation-modal.component';
+import { CreateEditProjectModalComponent } from '../modals/create-edit-project-modal/create-edit-project-modal.component';
 import { Project } from '../models/project';
 import { ProjectFile } from '../models/project-file';
 import { ProjectFilesService } from '../services/project-files.service';
@@ -13,10 +15,18 @@ import { TitleService } from '../services/title.service';
   styleUrls: ['./view-project.component.css'],
 })
 export class ViewProjectComponent implements OnInit {
-  project: Project;
+  isLoading: boolean;
+  project: Project = { name: '', description: '' };
   projectId: number;
   projectFiles: ProjectFile[];
-  isLoading: boolean;
+  selectedProjectFile: ProjectFile = {
+    filename: '',
+    pageTitle: '',
+    content: '',
+    createdOn: null,
+    updatedOn: null,
+    projectId: -1,
+  };
 
   constructor(
     private titleService: TitleService,
@@ -37,7 +47,7 @@ export class ViewProjectComponent implements OnInit {
     this.projectId = projectId;
 
     this.getProject().subscribe(() => {
-      this.titleService.setPageTitle(`${this.project.name} Project`);
+      this.titleService.setPageTitle(this.project.name);
       this.getProjectFiles();
     });
   }
@@ -66,25 +76,47 @@ export class ViewProjectComponent implements OnInit {
     return projectFilesObservable$;
   }
 
-  deleteProjectFile(id: number): Observable<ProjectFile> {
+  deleteProjectFile(
+    modalRef: ConfirmationModalComponent,
+    id: number
+  ): Observable<ProjectFile> {
     const deleteProjectFileObservable$ = this.projectFilesService.deleteProject(
       id
     );
 
-    deleteProjectFileObservable$.subscribe(() => {
-      this.getProjectFiles();
+    modalRef.open().then((result) => {
+      if (result) {
+        deleteProjectFileObservable$.subscribe(() => {
+          this.getProjectFiles();
+        });
+      }
     });
+
     return deleteProjectFileObservable$;
   }
 
-  deleteProject(): Observable<Project> {
+  deleteProject(modalRef: ConfirmationModalComponent): Observable<Project> {
     const deleteProjectObservable$ = this.projectService.deleteProject(
       this.projectId
     );
 
-    deleteProjectObservable$.subscribe(() => {
-      this.router.navigate(['/projects']);
+    modalRef.open().then((result) => {
+      if (result) {
+        deleteProjectObservable$.subscribe(() => {
+          this.router.navigate(['/projects']);
+        });
+      }
     });
+
     return deleteProjectObservable$;
+  }
+
+  openEditProjectModal(
+    editProjectModal: CreateEditProjectModalComponent
+  ): void {
+    editProjectModal.open(this.project).then((result: Project) => {
+      this.project = result;
+      this.titleService.setPageTitle(this.project.name);
+    });
   }
 }

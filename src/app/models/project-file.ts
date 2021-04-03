@@ -1,7 +1,7 @@
 import { Project } from './project';
 
 export interface ProjectFile {
-  id: number;
+  id?: number;
   filename: string;
   pageTitle: string;
   content: string;

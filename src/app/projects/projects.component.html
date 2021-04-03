@@ -1,11 +1,11 @@
-<div id="projects">
+<div *ngIf="isLoading" aria-live="polite">Loading...</div>
+
+<div *ngIf="!isLoading" class="projects">
   <button type="button" (click)="openCreateProjectModal(createProjectModal)">
     New Project
   </button>
 
-  <div *ngIf="isLoading" aria-live="polite">Loading...</div>
-
-  <ul *ngIf="projects">
+  <ul *ngIf="projects" style="list-style: none">
     <li *ngFor="let project of projects">
       <a [routerLink]="['/projects', project.id]">{{ project.name }}</a>
     </li>
@@ -15,4 +15,7 @@
   </div>
 </div>
 
-<app-create-project-modal #createProjectModal></app-create-project-modal>
+<app-create-edit-project-modal
+  #createProjectModal
+  mode="create"
+></app-create-edit-project-modal>

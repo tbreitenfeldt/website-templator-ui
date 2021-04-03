@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateProjectModalComponent } from './create-project-modal.component';
+import { ConfirmationModalComponent } from './confirmation-modal.component';
 
-describe('CreateProjectModalComponent', () => {
-  let component: CreateProjectModalComponent;
-  let fixture: ComponentFixture<CreateProjectModalComponent>;
+describe('ConfirmationModalComponent', () => {
+  let component: ConfirmationModalComponent;
+  let fixture: ComponentFixture<ConfirmationModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateProjectModalComponent ]
+      declarations: [ ConfirmationModalComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateProjectModalComponent);
+    fixture = TestBed.createComponent(ConfirmationModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
