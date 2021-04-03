@@ -3,7 +3,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Project } from 'src/app/models/project';
 import { ErrorService } from 'src/app/services/error.service';
-import { TitleService } from 'src/app/services/title.service';
 import { ProjectsService } from '../../services/projects.service';
 import { ModalComponent } from '../modal/modal.component';
 
@@ -19,7 +18,6 @@ export class CreateEditProjectModalComponent implements OnInit {
   @Input() mode?: 'create' | 'edit' = 'create';
 
   constructor(
-    private titleService: TitleService,
     private projectsService: ProjectsService,
     public errorService: ErrorService
   ) {
@@ -56,7 +54,7 @@ export class CreateEditProjectModalComponent implements OnInit {
     );
 
     createProjectObservable$.subscribe((result: Project) => {
-      this.project.id = result.id;
+      this.project = result;
       this.modalRef.close(this.project);
     });
     return createProjectObservable$;
@@ -68,7 +66,7 @@ export class CreateEditProjectModalComponent implements OnInit {
     );
 
     updateProjectObservable$.subscribe(() => {
-      this.modalRef.close(this.project);
+      this.modalRef.close(result);
     });
     return updateProjectObservable$;
   }

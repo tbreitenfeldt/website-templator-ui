@@ -10,7 +10,9 @@
 
   <p *ngIf="project && project.description">{{ project.description }}</p>
   <hr />
-  <button>Create New File</button>
+  <button (click)="openCreateFileModal(createFileModal)">
+    Create New File
+  </button>
 
   <div *ngIf="projectFiles" class="project-files">
     <table>
@@ -23,12 +25,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let projectFile of projectFiles">
+        <tr *ngFor="let projectFile of projectFiles; index as i">
           <td scope="row">{{ projectFile.filename }}</td>
           <td>{{ projectFile.createdOn | date: "short" }}</td>
           <td>{{ projectFile.updatedOn | date: "short" }}</td>
           <td>
-            <button>Edit {{ projectFile.filename }}</button>
+            <button
+              (click)="
+                selectedProjectFile = projectFile;
+                openEditFileModal(editFileModal, i)
+              "
+            >
+              Edit {{ projectFile.filename }}
+            </button>
             <button
               (click)="
                 selectedProjectFile = projectFile;
@@ -64,3 +73,13 @@
   #editProjectModal
   mode="edit"
 ></app-create-edit-project-modal>
+
+<app-create-edit-file-modal
+  #createFileModal
+  mode="create"
+></app-create-edit-file-modal>
+
+<app-create-edit-file-modal
+  #editFileModal
+  mode="edit"
+></app-create-edit-file-modal>

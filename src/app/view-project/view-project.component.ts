@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationModalComponent } from '../modals/confirmation-modal/confirmation-modal.component';
+import { CreateEditFileModalComponent } from '../modals/create-edit-file-modal/create-edit-file-modal.component';
 import { CreateEditProjectModalComponent } from '../modals/create-edit-project-modal/create-edit-project-modal.component';
 import { Project } from '../models/project';
 import { ProjectFile } from '../models/project-file';
@@ -16,6 +17,7 @@ import { TitleService } from '../services/title.service';
 })
 export class ViewProjectComponent implements OnInit {
   isLoading: boolean;
+  isModalActive: boolean = false;
   project: Project = { name: '', description: '' };
   projectId: number;
   projectFiles: ProjectFile[];
@@ -39,11 +41,6 @@ export class ViewProjectComponent implements OnInit {
   ngOnInit(): void {
     const tempId: string = this.activatedRoute.snapshot.paramMap.get('id');
     const projectId = parseInt(tempId, 10);
-
-    if (!projectId) {
-      throw Error('Invalid project ID');
-    }
-
     this.projectId = projectId;
 
     this.getProject().subscribe(() => {
@@ -115,8 +112,30 @@ export class ViewProjectComponent implements OnInit {
     editProjectModal: CreateEditProjectModalComponent
   ): void {
     editProjectModal.open(this.project).then((result: Project) => {
-      this.project = result;
-      this.titleService.setPageTitle(this.project.name);
+      if (result) {
+        this.project = result;
+        this.titleService.setPageTitle(this.project.name);
+      }
+    });
+  }
+
+  openCreateFileModal(createFileModal: CreateEditFileModalComponent): void {
+    createFileModal.open().then((result: ProjectFile) => {
+      if (result) {
+        this.projectFiles.push(result);
+      }
+    });
+  }
+
+  openEditFileModal(
+    editFileModal: CreateEditFileModalComponent,
+    index: number
+  ): void {
+    editFileModal.open(this.selectedProjectFile).then((result: ProjectFile) => {
+      if (result) {
+        const deleteCount = 1;
+        this.projectFiles.splice(index, deleteCount, result);
+      }
     });
   }
 }

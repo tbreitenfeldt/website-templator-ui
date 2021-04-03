@@ -23,6 +23,7 @@ import { ViewProjectComponent } from './view-project/view-project.component';
 import { ModalComponent } from './modals/modal/modal.component';
 import { CreateEditProjectModalComponent } from './modals/create-edit-project-modal/create-edit-project-modal.component';
 import { ConfirmationModalComponent } from './modals/confirmation-modal/confirmation-modal.component';
+import { CreateEditFileModalComponent } from './modals/create-edit-file-modal/create-edit-file-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ConfirmationModalComponent } from './modals/confirmation-modal/confirma
     ModalComponent,
     CreateEditProjectModalComponent,
     ConfirmationModalComponent,
+    CreateEditFileModalComponent,
   ],
   imports: [
     BrowserModule,
