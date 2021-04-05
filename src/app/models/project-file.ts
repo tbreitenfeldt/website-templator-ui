@@ -7,5 +7,6 @@ export interface ProjectFile {
   content: string;
   createdOn: Date;
   updatedOn?: Date;
+  published: boolean;
   projectId: number;
 }

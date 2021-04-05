@@ -20,15 +20,15 @@ export class CreateEditProjectModalComponent implements OnInit {
   constructor(
     private projectsService: ProjectsService,
     public errorService: ErrorService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     if (this.mode === 'create') {
       this.modalTitle = 'Create Project Modal';
     } else if (this.mode === 'edit') {
       this.modalTitle = 'Edit Project Modal';
     }
   }
-
-  ngOnInit(): void {}
 
   open(projectToUpdate: Project = null): Promise<any> {
     if (this.mode === 'edit' && projectToUpdate) {
@@ -65,7 +65,7 @@ export class CreateEditProjectModalComponent implements OnInit {
       this.project
     );
 
-    updateProjectObservable$.subscribe(() => {
+    updateProjectObservable$.subscribe((result: Project) => {
       this.modalRef.close(result);
     });
     return updateProjectObservable$;

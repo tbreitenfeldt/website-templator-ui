@@ -17,6 +17,7 @@ export class CreateEditFileModalComponent implements OnInit {
     pageTitle: '',
     content: '',
     createdOn: null,
+    published: false,
     projectId: -1,
   };
   modalTitle: string;
@@ -27,15 +28,15 @@ export class CreateEditFileModalComponent implements OnInit {
     private projectFilesService: ProjectFilesService,
     public errorService: ErrorService,
     private activatedRoute: ActivatedRoute
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     if (this.mode === 'create') {
       this.modalTitle = 'Create File Modal';
     } else if (this.mode === 'edit') {
       this.modalTitle = 'Edit File Modal';
     }
   }
-
-  ngOnInit(): void {}
 
   open(fileToUpdate: ProjectFile = null): Promise<any> {
     if (this.mode === 'edit' && fileToUpdate) {

@@ -27,6 +27,7 @@ export class ViewProjectComponent implements OnInit {
     content: '',
     createdOn: null,
     updatedOn: null,
+    published: false,
     projectId: -1,
   };
 
@@ -44,7 +45,7 @@ export class ViewProjectComponent implements OnInit {
     this.projectId = projectId;
 
     this.getProject().subscribe(() => {
-      this.titleService.setPageTitle(this.project.name);
+      this.titleService.setPageTitle(`${this.project.name} Project`);
       this.getProjectFiles();
     });
   }
@@ -123,6 +124,9 @@ export class ViewProjectComponent implements OnInit {
     createFileModal.open().then((result: ProjectFile) => {
       if (result) {
         this.projectFiles.push(result);
+        this.router.navigate([
+          `/projects/${this.projectId}/files/${result.id}`,
+        ]);
       }
     });
   }

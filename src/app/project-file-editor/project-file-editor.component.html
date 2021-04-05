@@ -1,0 +1,69 @@
+<div *ngIf="isLoading" aria-live="polite">Loading...</div>
+
+<div *ngIf="!isLoading" id="file-editor">
+  <h3>{{ projectFile.pageTitle }}</h3>
+  <button (click)="openCreateFileModal(createFileModal)">
+    Create New File
+  </button>
+  <button (clikc)="openEditFileModal(editFileModal)">Rename File</button>
+  <button (click)="deleteProjectFile(deleteFileConfirmationModal)">
+    Delete File
+  </button>
+  <hr />
+  <p>
+    Created On: {{ projectFile.createdOn }}<br />
+    Updated On: {{ projectFile.updatedOn }}<br />
+    {{ projectFile.published ? "Published" : "Unpublished" }}
+    <span *ngIf="projectFile.published">
+      <a href="{{ publishedUrl }}">{{ publishedUrl }}</a>
+    </span>
+  </p>
+
+  <ckeditor
+    role="textarea"
+    [editor]="editor"
+    [ngModel]="projectFile.content"
+    (change)="onEditorChange($event)"
+  ></ckeditor>
+
+  <div aria-live="assertive">{{ saveMessage }}</div>
+  <div *ngIf="errorService.error" class="error" role="alert">
+    {{ errorService.errorMessage }}
+  </div>
+  <button (click)="saveProjectFile()">Save</button>
+  <button (click)="publishProjectFile(unableToPublishFileAlertModal)">
+    Publish
+  </button>
+  <button (click)="unpublishProjectFile()">Unpublish</button>
+
+  <h4>All ProjectFiles</h4>
+  <ul style="list-style: none">
+    <li *ngFor="let file of projectFiles">
+      {{ file.filename }}
+    </li>
+  </ul>
+</div>
+
+<app-confirmation-modal
+  #deleteFileConfirmationModal
+  title="Delete File Confirmation"
+  message="Are you sure you would like to delete the file {{
+    projectFile.filename
+  }}?"
+></app-confirmation-modal>
+
+<app-alert-modal
+  #unableToPublishFileAlertModal
+  title="Publishing Error Alert"
+  message="Unable to publish file until the file is saved. Please save your file, and republish your file."
+></app-alert-modal>
+
+<app-create-edit-file-modal
+  #createFileModal
+  mode="create"
+></app-create-edit-file-modal>
+
+<app-create-edit-file-modal
+  #editFileModal
+  mode="edit"
+></app-create-edit-file-modal>

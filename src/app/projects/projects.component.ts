@@ -4,6 +4,7 @@ import { ErrorService } from '../services/error.service';
 import { ProjectsService } from '../services/projects.service';
 import { TitleService } from '../services/title.service';
 import { CreateEditProjectModalComponent } from '../modals/create-edit-project-modal/create-edit-project-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-projects',
@@ -17,7 +18,8 @@ export class ProjectsComponent implements OnInit {
   constructor(
     private projectsService: ProjectsService,
     private titleService: TitleService,
-    public errorService: ErrorService
+    public errorService: ErrorService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +40,7 @@ export class ProjectsComponent implements OnInit {
     createProjectModal.open().then((result: Project) => {
       if (result) {
         this.projects.push(result);
+        this.router.navigate([`/projects/${result.id}`]);
       }
     });
   }

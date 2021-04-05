@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { ProjectFileEditorComponent } from './project-file-editor/project-file-editor.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
 
@@ -19,7 +20,12 @@ const routes: Routes = [
   {
     path: 'projects/:id',
     component: ViewProjectComponent,
-    data: { title: 'Project' },
+    data: { title: '' },
+  },
+  {
+    path: 'projects/:projectId/files/:fileId',
+    component: ProjectFileEditorComponent,
+    data: { title: '' },
   },
 ];
 

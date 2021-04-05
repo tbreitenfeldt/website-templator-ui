@@ -101,8 +101,11 @@ export class TitleService {
     this.title$.subscribe((title) => {
       // Scroll to top
       window.scrollTo(0, 0);
-      // Set title to the page and set the focus to element with provided selector
-      this.setPageTitle(title, selectorForHeading);
+      // If the provided title is empty, the assumption is that the title will be handled in the component.
+      if (title) {
+        // Set title to the page and set the focus to element with provided selector
+        this.setPageTitle(title, selectorForHeading);
+      }
     });
   }
 

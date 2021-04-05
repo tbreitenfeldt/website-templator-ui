@@ -18,6 +18,10 @@ export class ProjectFilesService {
     );
   }
 
+  getProjectFile(id: number): Observable<ProjectFile> {
+    return this.http.get<ProjectFile>(`${this.apiUrl}/api/project/files/${id}`);
+  }
+
   createProjectFile(projectFile: ProjectFile): Observable<ProjectFile> {
     return this.http.post<ProjectFile>(
       `${this.apiUrl}/api/project/file`,
@@ -38,17 +42,15 @@ export class ProjectFilesService {
     );
   }
 
-  publishProject(id: number): Observable<ProjectFile> {
-    return this.http.post<ProjectFile>(
-      `${this.apiUrl}/api/project/files/${id}/publish`,
-      null
+  publishProjectFile(id: number): Observable<ProjectFile> {
+    return this.http.get<ProjectFile>(
+      `${this.apiUrl}/api/project/files/${id}/publish`
     );
   }
 
-  unpublishProject(id: number): Observable<ProjectFile> {
-    return this.http.post<ProjectFile>(
-      `${this.apiUrl}/api/project/files/${id}/unpublish`,
-      null
+  unpublishProjectFile(id: number): Observable<ProjectFile> {
+    return this.http.get<ProjectFile>(
+      `${this.apiUrl}/api/project/files/${id}/unpublish`
     );
   }
 }

@@ -26,7 +26,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let projectFile of projectFiles; index as i">
-          <td scope="row">{{ projectFile.filename }}</td>
+          <td scope="row">
+            <a [routerLink]="['/projects', projectId, 'files', projectFile.id]">
+              {{ projectFile.filename }}
+            </a>
+          </td>
           <td>{{ projectFile.createdOn | date: "short" }}</td>
           <td>{{ projectFile.updatedOn | date: "short" }}</td>
           <td>
@@ -36,7 +40,7 @@
                 openEditFileModal(editFileModal, i)
               "
             >
-              Edit {{ projectFile.filename }}
+              Rename {{ projectFile.filename }}
             </button>
             <button
               (click)="
