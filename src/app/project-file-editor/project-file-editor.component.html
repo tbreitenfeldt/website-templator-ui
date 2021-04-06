@@ -1,7 +1,6 @@
 <div *ngIf="isLoading" aria-live="polite">Loading...</div>
 
 <div *ngIf="!isLoading" id="file-editor">
-  <h3>{{ projectFile.pageTitle }}</h3>
   <button (click)="openCreateFileModal(createFileModal)">
     Create New File
   </button>
@@ -12,29 +11,34 @@
   <hr />
   <p>
     Created On: {{ projectFile.createdOn }}<br />
-    Updated On: {{ projectFile.updatedOn }}<br />
+    Updated On: {{ projectFile.updatedOn ? projectFile.updatedOn : "N/A"
+    }}<br />
     {{ projectFile.published ? "Published" : "Unpublished" }}
     <span *ngIf="projectFile.published">
       <a href="{{ publishedUrl }}">{{ publishedUrl }}</a>
     </span>
   </p>
+  <h3>{{ projectFile.pageTitle }}</h3>
 
   <ckeditor
     role="textarea"
     [editor]="editor"
-    [ngModel]="projectFile.content"
+    [(ngModel)]="projectFile.content"
     (change)="onEditorChange($event)"
   ></ckeditor>
 
-  <div aria-live="assertive">{{ saveMessage }}</div>
+  <div role="alert">{{ saveMessage }}</div>
   <div *ngIf="errorService.error" class="error" role="alert">
     {{ errorService.errorMessage }}
   </div>
-  <button (click)="saveProjectFile()">Save</button>
-  <button (click)="publishProjectFile(unableToPublishFileAlertModal)">
+  <button accesskey="s" (click)="saveProjectFile()">Save</button>
+  <button
+    accesskey="p"
+    (click)="publishProjectFile(unableToPublishFileAlertModal)"
+  >
     Publish
   </button>
-  <button (click)="unpublishProjectFile()">Unpublish</button>
+  <button accesskey="u" (click)="unpublishProjectFile()">Unpublish</button>
 
   <h4>All ProjectFiles</h4>
   <ul style="list-style: none">
@@ -55,7 +59,7 @@
 <app-alert-modal
   #unableToPublishFileAlertModal
   title="Publishing Error Alert"
-  message="Unable to publish file until the file is saved. Please save your file, and republish your file."
+  message="Unable to publish file. File is already published or you have not saved."
 ></app-alert-modal>
 
 <app-create-edit-file-modal

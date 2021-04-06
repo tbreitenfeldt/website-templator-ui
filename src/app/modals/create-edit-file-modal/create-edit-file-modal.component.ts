@@ -49,6 +49,9 @@ export class CreateEditFileModalComponent implements OnInit {
   }
 
   onSubmit(event: Event): void {
+    //append .html to the end of the filename
+    this.projectFile.filename += '.html';
+
     if (this.mode === 'create') {
       this.createProjectFile();
     } else if (this.mode === 'edit') {
@@ -57,9 +60,12 @@ export class CreateEditFileModalComponent implements OnInit {
   }
 
   createProjectFile(): Observable<ProjectFile> {
-    const tempId: string = this.activatedRoute.snapshot.paramMap.get('id');
+    const tempId: string =
+      this.activatedRoute.snapshot.paramMap.get('id') ||
+      this.activatedRoute.snapshot.paramMap.get('projectId');
     const projectId = parseInt(tempId, 10);
     this.projectFile.projectId = projectId;
+    console.log(projectId);
 
     const createProjectFileObservable$ = this.projectFilesService.createProjectFile(
       this.projectFile
@@ -67,7 +73,7 @@ export class CreateEditFileModalComponent implements OnInit {
 
     createProjectFileObservable$.subscribe((result: ProjectFile) => {
       this.projectFile = result;
-      this.modalRef.close(this.projectFile);
+      this.modalRef.close(result);
     });
     return createProjectFileObservable$;
   }

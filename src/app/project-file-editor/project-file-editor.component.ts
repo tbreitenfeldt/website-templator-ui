@@ -88,7 +88,7 @@ export class ProjectFileEditorComponent implements OnInit {
   getProjectFile(): Observable<ProjectFile> {
     this.isLoading = true;
     const getFileObservable$ = this.projectFilesService.getProjectFile(
-      this.projectId
+      this.fileId
     );
 
     getFileObservable$.subscribe((result: ProjectFile) => {
@@ -112,57 +112,75 @@ export class ProjectFileEditorComponent implements OnInit {
   }
 
   saveProjectFile(): Observable<ProjectFile> {
-    this.saveMessage = 'Saving...';
-    this.isSaved = true;
-    const updateFileObservable$ = this.projectFilesService.updateProjectFile(
-      this.projectFile
-    );
+    if (!this.isSaved) {
+      this.saveMessage = 'Saving...';
+      const updateFileObservable$ = this.projectFilesService.updateProjectFile(
+        this.projectFile
+      );
 
-    updateFileObservable$.subscribe((result: ProjectFile) => {
-      this.projectFile = result;
-      this.saveMessage = 'Saved';
-      setTimeout(() => (this.saveMessage = ''), 2000);
-    });
-    return updateFileObservable$;
+      updateFileObservable$.subscribe((result: ProjectFile) => {
+        this.projectFile = result;
+        this.isSaved = true;
+        this.saveMessage = 'Saved';
+        setTimeout(() => (this.saveMessage = ''), 2000);
+      });
+      return updateFileObservable$;
+    }
+
+    return null;
   }
 
   publishProjectFile(alertModal: AlertModalComponent): Observable<ProjectFile> {
-    if (!this.isSaved) {
-      alertModal.open();
-    } else {
+    if (
+      this.isSaved &&
+      !this.projectFile.published &&
+      this.projectFile.content.trim() !== ''
+    ) {
       this.isLoading = true;
+      this.saveMessage = 'Publishing...';
       const publishFileObservable$ = this.projectFilesService.publishProjectFile(
         this.fileId
       );
 
       publishFileObservable$.subscribe(() => {
+        this.saveMessage = 'Published!';
+        setTimeout(() => (this.saveMessage = ''), 2000);
         this.isLoading = false;
         this.projectFile.published = true;
         window.open(this.publishedUrl);
       });
       return publishFileObservable$;
     }
+
+    alertModal.open();
+    return null;
   }
 
   unpublishProjectFile(): Observable<ProjectFile> {
-    this.isLoading = true;
-    const unpublishFileObservable$ = this.projectFilesService.unpublishProjectFile(
-      this.fileId
-    );
+    if (this.projectFile.published) {
+      this.saveMessage = 'Unpublishing...';
+      this.isLoading = true;
+      const unpublishFileObservable$ = this.projectFilesService.unpublishProjectFile(
+        this.fileId
+      );
 
-    unpublishFileObservable$.subscribe(() => {
-      this.isLoading = false;
-      this.projectFile.published = false;
-    });
-    return unpublishFileObservable$;
+      unpublishFileObservable$.subscribe(() => {
+        this.saveMessage = 'Unpublished file';
+        setTimeout(() => (this.saveMessage = ''), 2000);
+        this.isLoading = false;
+        this.projectFile.published = false;
+      });
+      return unpublishFileObservable$;
+    }
+
+    return null;
   }
 
   deleteProjectFile(
-    modalRef: ConfirmationModalComponent,
-    id: number
+    modalRef: ConfirmationModalComponent
   ): Observable<ProjectFile> {
     const deleteProjectFileObservable$ = this.projectFilesService.deleteProject(
-      id
+      this.projectId
     );
 
     modalRef.open().then((result) => {
@@ -178,17 +196,12 @@ export class ProjectFileEditorComponent implements OnInit {
   openCreateFileModal(createFileModal: CreateEditFileModalComponent): void {
     createFileModal.open().then((result: ProjectFile) => {
       if (result) {
-        this.router.navigate([
-          `/projects/${this.projectId}/files/${result.id}`,
-        ]);
+        this.router.navigate(['/projects', this.projectId, 'files', result.id]);
       }
     });
   }
 
-  openEditFileModal(
-    editFileModal: CreateEditFileModalComponent,
-    index: number
-  ): void {
+  openEditFileModal(editFileModal: CreateEditFileModalComponent): void {
     editFileModal.open(this.projectFile).then((result: ProjectFile) => {
       if (result) {
         this.projectFile = result;

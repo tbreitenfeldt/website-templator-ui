@@ -1,7 +1,7 @@
 <app-modal #modalRef [title]="modalTitle">
   <form (ngSubmit)="onSubmit($event)">
     <div class="form-group">
-      <label for="filename" class="col-form-label">Filename: </label>
+      <label for="filename" class="col-form-label">Filename (.html):</label>
       <input
         class="form-control"
         name="filename"
@@ -9,6 +9,7 @@
         [(ngModel)]="projectFile.filename"
         required
       />
+      <p>.html</p>
     </div>
     <div class="form-group">
       <label for="pageTitle" class="col-form-label"> Page Title: </label>
