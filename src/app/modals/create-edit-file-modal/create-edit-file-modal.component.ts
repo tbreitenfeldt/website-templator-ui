@@ -44,13 +44,22 @@ export class CreateEditFileModalComponent implements OnInit {
     } else if (this.mode === 'edit' && !fileToUpdate) {
       throw Error('Please provide a valid Project object when editing.');
     }
+    if (this.projectFile.filename.endsWith('.html')) {
+      const filename = this.projectFile.filename;
+      this.projectFile.filename = filename.slice(
+        0,
+        filename.length - '.html'.length
+      );
+    }
 
     return this.modalRef.open();
   }
 
   onSubmit(event: Event): void {
+    console.log(this.projectFile.filename);
     //append .html to the end of the filename
     this.projectFile.filename += '.html';
+    console.log(this.projectFile.filename);
 
     if (this.mode === 'create') {
       this.createProjectFile();

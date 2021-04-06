@@ -4,7 +4,7 @@
   <button (click)="openCreateFileModal(createFileModal)">
     Create New File
   </button>
-  <button (clikc)="openEditFileModal(editFileModal)">Rename File</button>
+  <button (click)="openEditFileModal(editFileModal)">Rename File</button>
   <button (click)="deleteProjectFile(deleteFileConfirmationModal)">
     Delete File
   </button>
@@ -43,7 +43,9 @@
   <h4>All ProjectFiles</h4>
   <ul style="list-style: none">
     <li *ngFor="let file of projectFiles">
-      {{ file.filename }}
+      <a [routerLink]="['/projects', file.projectId, 'files', file.id]">
+        {{ file.filename }}</a
+      >
     </li>
   </ul>
 </div>
@@ -59,7 +61,7 @@
 <app-alert-modal
   #unableToPublishFileAlertModal
   title="Publishing Error Alert"
-  message="Unable to publish file. File is already published or you have not saved."
+  message="Please save before publishing."
 ></app-alert-modal>
 
 <app-create-edit-file-modal

@@ -49,22 +49,24 @@ export class ProjectFileEditorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const projectIdStr: string = this.activatedRoute.snapshot.paramMap.get(
-      'projectId'
-    );
-    const projectId = parseInt(projectIdStr, 10);
-    const fileIdStr = this.activatedRoute.snapshot.paramMap.get('fileId');
-    const fileId = parseInt(fileIdStr, 10);
-    this.projectId = projectId;
-    this.fileId = fileId;
+    this.activatedRoute.params.subscribe((params) => {
+      const projectIdStr: string = this.activatedRoute.snapshot.paramMap.get(
+        'projectId'
+      );
+      const projectId = parseInt(projectIdStr, 10);
+      const fileIdStr = this.activatedRoute.snapshot.paramMap.get('fileId');
+      const fileId = parseInt(fileIdStr, 10);
+      this.projectId = projectId;
+      this.fileId = fileId;
 
-    this.getProject().subscribe(() => {
-      this.getProjectFile().subscribe(() => {
-        this.titleService.setPageTitle(this.projectFile.filename);
-        this.publishedUrl = `${this.apiUrl}/projects/${this.project.name}/${this.projectFile.filename}`;
+      this.getProject().subscribe(() => {
+        this.getProjectFile().subscribe(() => {
+          this.titleService.setPageTitle(this.projectFile.filename);
+          this.publishedUrl = `${this.apiUrl}/projects/${this.project.name}/${this.projectFile.filename}`;
+        });
+
+        this.getAllProjectFiles();
       });
-
-      this.getAllProjectFiles();
     });
   }
 
@@ -131,11 +133,11 @@ export class ProjectFileEditorComponent implements OnInit {
   }
 
   publishProjectFile(alertModal: AlertModalComponent): Observable<ProjectFile> {
-    if (
-      this.isSaved &&
-      !this.projectFile.published &&
-      this.projectFile.content.trim() !== ''
-    ) {
+    if (!this.isSaved || this.projectFile.content.trim() !== '') {
+      alertModal.open();
+    } else if (this.projectFile.published) {
+      window.open(this.publishedUrl);
+    } else {
       this.isLoading = true;
       this.saveMessage = 'Publishing...';
       const publishFileObservable$ = this.projectFilesService.publishProjectFile(
@@ -147,12 +149,10 @@ export class ProjectFileEditorComponent implements OnInit {
         setTimeout(() => (this.saveMessage = ''), 2000);
         this.isLoading = false;
         this.projectFile.published = true;
-        window.open(this.publishedUrl);
       });
       return publishFileObservable$;
     }
 
-    alertModal.open();
     return null;
   }
 
@@ -180,7 +180,7 @@ export class ProjectFileEditorComponent implements OnInit {
     modalRef: ConfirmationModalComponent
   ): Observable<ProjectFile> {
     const deleteProjectFileObservable$ = this.projectFilesService.deleteProject(
-      this.projectId
+      this.fileId
     );
 
     modalRef.open().then((result) => {
@@ -205,6 +205,7 @@ export class ProjectFileEditorComponent implements OnInit {
     editFileModal.open(this.projectFile).then((result: ProjectFile) => {
       if (result) {
         this.projectFile = result;
+        this.titleService.setPageTitle(this.projectFile.filename);
       }
     });
   }

@@ -40,13 +40,15 @@ export class ViewProjectComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const tempId: string = this.activatedRoute.snapshot.paramMap.get('id');
-    const projectId = parseInt(tempId, 10);
-    this.projectId = projectId;
+    this.activatedRoute.params.subscribe((parms) => {
+      const tempId: string = this.activatedRoute.snapshot.paramMap.get('id');
+      const projectId = parseInt(tempId, 10);
+      this.projectId = projectId;
 
-    this.getProject().subscribe(() => {
-      this.titleService.setPageTitle(`${this.project.name} Project`);
-      this.getProjectFiles();
+      this.getProject().subscribe(() => {
+        this.titleService.setPageTitle(`${this.project.name} Project`);
+        this.getProjectFiles();
+      });
     });
   }
 
